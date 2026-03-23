@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术文档下载中心</title>
+    <!-- 引入字体图标库 (FontAwesome) 用于显示PDF图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 全局重置与基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏样式 */
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            /* Logo 靠左 */
+            margin-right: auto; 
+        }
+
+        .logo-img {
+            height: 40px;
+            width: auto;
+            /* 如果没有真实图片，这个样式会让占位符看起来像个Logo */
+            background-color: transparent; 
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* 主体内容区域 */
+        main {
+            flex: 1;
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        .page-title h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        /* 文件列表容器 */
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* 单个文件卡片样式 */
+        .file-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+            text-decoration: none; /* 移除链接下划线 */
+            color: inherit;
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+            border-color: #0056b3;
+        }
+
+        .file-icon {
+            font-size: 42px;
+            color: #e74c3c; /* PDF 红色 */
+            flex-shrink: 0;
+        }
+
+        .file-info {
+            flex: 1;
+            overflow: hidden; /* 防止长文件名溢出 */
+        }
+
+        .file-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            /* 长文件名省略号处理 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-type {
+            font-size: 12px;
+            color: #95a5a6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .download-btn {
+            background-color: #f0f2f5;
+            color: #0056b3;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .file-card:hover .download-btn {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        /* 页脚 */
+        /* footer {
+            text-align: center;
+            padding: 20px;
+            color: #95a5a6;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+        } */
+        .contact-bar {
+            background-color: #2c3e50; /* 深色背景，与页脚区分 */
+            color: #ecf0f1;
+            padding: 15px 0;
+            font-size: 14px;
+            text-align: center;
+            margin-top: auto; /* 确保在 flex 布局中推到底部 */
+        }
+
+        .contact-bar-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px; /* 地址和邮箱之间的间距 */
+            flex-wrap: wrap; /* 移动端自动换行 */
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-item i {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .contact-item a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .contact-item a:hover {
+            opacity: 0.7;
+            text-decoration: underline;
+        }
+
+        /* 移动端适配：堆叠显示 */
+        @media (max-width: 600px) {
+            .contact-bar-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            header {
+                padding: 0 20px;
+            }
+            .file-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            .file-name {
+                white-space: normal; /* 移动端允许换行 */
+            }
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航：Logo 靠左 -->
+    <header>
+        <div class="logo-container">
+            <!-- 
+               【重要】请在此处替换您的真实 Logo 图片。
+               用法：<img src="您的logo路径.png" alt="Company Logo" class="logo-img">
+               下面是一个纯文字的占位符示例：
+            -->
+            <img src="img/logo1.png" alt="半水科技 Logo" class="logo-img"> 
+            <span class="logo-text">半水科技（厦门）科技有限公司</span>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main>
+        <div class="page-title">
+            <h1>技术规格书下载</h1>
+            <p>请点击下方卡片下载相关技术文档 (PDF)</p>
+        </div>
+
+        <div class="file-list">
+            <!-- 文件 1 -->
+            <!-- 修改处：href 指向 file 文件夹下的对应文件名 -->
+            <a href="./file/C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf" class="file-card" download>
+                <div class="file-icon">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name" title="C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf">
+                        C468936_ADC-DAC-专用型_AD7745ARUZ_规格书
+                    </div>
+                    <div class="file-type">PDF Document • 2.4 MB</div>
+                </div>
+                <div class="download-btn">
+                    <i class="fa-solid fa-download"></i> 下载
+                </div>
+            </a>
+
+            <!-- 文件 2 -->
+            <!-- 修改处：href 指向 file 文件夹下的对应文件名 -->
+            <a href="./file/AD7746扩展电容配置方法.pdf" class="file-card" download>
+                <div class="file-icon">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name" title="AD7746扩展电容配置方法.pdf">
+                        AD7746扩展电容配置方法
+                    </div>
+                    <div class="file-type">PDF Document • 1.1 MB</div>
+                </div>
+                <div class="download-btn">
+                    <i class="fa-solid fa-download"></i> 下载
+                </div>
+            </a>
+        </div>
+    </main>
+    <div class="contact-bar">
+        <div class="contact-bar-content">
+            <!-- 地址 -->
+            <div class="contact-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>厦门市翔安区民安街道莲亭路821号801室之一</span>
+            </div>
+            
+            <!-- 邮箱 (请将 href 中的邮箱和显示文本替换为您公司的完整邮箱) -->
+            <div class="contact-item">
+                <i class="fa-solid fa-envelope"></i>
+                <!-- 示例邮箱，请根据实际情况修改 -->
+                <a href="2069187829@qq.com">2069187829@qq.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
