@@ -469,48 +469,69 @@
     <!-- 页脚 -->
     <footer>
     <script>
-            // 打开预览
-            function openPreview(fileUrl, fileName) {
-                const modal = document.getElementById('pdfModal');
-                const viewer = document.getElementById('pdfViewer');
-                const title = document.getElementById('modalTitle');
-    
-                // 设置标题和来源
-                title.textContent = fileName;
-                viewer.src = fileUrl;
-                
-                // 显示模态框
-                modal.style.display = 'flex';
-                // 禁止背景滚动
-                document.body.style.overflow = 'hidden';
+        // 检测设备是否为移动端
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // 获取所有预览按钮并绑定事件
+        document.querySelectorAll('.preview-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const fileUrl = this.getAttribute('data-url');
+                const fileName = this.getAttribute('data-name');
+
+                if (isMobile()) {
+                    // 【手机端策略】：直接在新标签页打开
+                    // 这样能调用手机系统自带的 PDF 阅读器（如 iOS 的 QuickLook 或 Android 的查看器）
+                    // 避免 iframe 在手机上无法显示的问题
+                    window.open(fileUrl, '_blank');
+                } else {
+                    // 【电脑端策略】：保持原有的弹窗预览体验
+                    openPreview(fileUrl, fileName);
+                }
+            });
+        });
+
+        // --- 以下是原有的电脑端弹窗逻辑 ---
+
+        function openPreview(fileUrl, fileName) {
+            const modal = document.getElementById('pdfModal');
+            const viewer = document.getElementById('pdfViewer');
+            const title = document.getElementById('modalTitle');
+
+            if (!modal || !viewer) return;
+
+            title.textContent = fileName;
+            viewer.src = fileUrl;
+            
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePreview(event) {
+            if (event.target.id === 'pdfModal') {
+                forceClosePreview();
             }
-    
-            // 关闭预览 (点击背景关闭)
-            function closePreview(event) {
-                if (event.target.id === 'pdfModal') {
+        }
+
+        function forceClosePreview() {
+            const modal = document.getElementById('pdfModal');
+            const viewer = document.getElementById('pdfViewer');
+            
+            if (!modal) return;
+
+            modal.style.display = 'none';
+            if (viewer) viewer.src = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 监听 ESC 键关闭
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                const modal = document.getElementById('pdfModal');
+                if (modal && modal.style.display === 'flex') {
                     forceClosePreview();
                 }
             }
-    
-            // 强制关闭 (点击 X 按钮或代码调用)
-            function forceClosePreview() {
-                const modal = document.getElementById('pdfModal');
-                const viewer = document.getElementById('pdfViewer');
-                
-                modal.style.display = 'none';
-                // 清空 src 以停止加载/播放
-                viewer.src = '';
-                // 恢复背景滚动
-                document.body.style.overflow = 'auto';
-            }
-    
-            // 监听 ESC 键关闭
-            document.addEventListener('keydown', function(event) {
-                if (event.key === "Escape") {
-                    const modal = document.getElementById('pdfModal');
-                    if (modal.style.display === 'flex') {
-                        forceClosePreview();
-                    }
-                }
-            });
-        </script>
+        });
+    </script>
