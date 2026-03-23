@@ -404,11 +404,10 @@
                     <div class="file-type">PDF Document • 2.4 MB</div>
                 </div>
                 <div class="action-buttons">
-                    <!-- 预览按钮：调用 JS 函数打开模态框 -->
-                    <button class="preview-btn" onclick="openPreview('./C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf', 'C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf')">
-                        <i class="fa-solid fa-eye"></i> 预览
+                    <!-- 修改处：添加 data-url 属性，移除 onclick 参数 -->
+                    <button class="preview-btn" data-url="./C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf" data-name="C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf">
+                        <i class="fa-solid fa-eye"></i> <span class="btn-text">预览</span>
                     </button>
-                    <!-- 下载按钮：保持原有下载功能 -->
                     <a href="./C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf" class="download-btn" download>
                         <i class="fa-solid fa-download"></i> 下载
                     </a>
@@ -427,11 +426,10 @@
                     <div class="file-type">PDF Document • 1.1 MB</div>
                 </div>
                 <div class="action-buttons">
-                    <!-- 预览按钮 -->
-                    <button class="preview-btn" onclick="openPreview('./AD7746扩展电容配置方法.pdf', 'AD7746扩展电容配置方法.pdf')">
-                        <i class="fa-solid fa-eye"></i> 预览
+                    <!-- 修改处：添加 data-url 属性 -->
+                    <button class="preview-btn" data-url="./AD7746扩展电容配置方法.pdf" data-name="AD7746扩展电容配置方法.pdf">
+                        <i class="fa-solid fa-eye"></i> <span class="btn-text">预览</span>
                     </button>
-                    <!-- 下载按钮 -->
                     <a href="./AD7746扩展电容配置方法.pdf" class="download-btn" download>
                         <i class="fa-solid fa-download"></i> 下载
                     </a>
