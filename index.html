@@ -387,13 +387,9 @@
 
     <!-- 主要内容 -->
     <main>
-        <div class="page-title">
-            <h1>技术规格书下载</h1>
-            <p>请点击下方卡片下载相关技术文档 (PDF)</p>
-        </div>
-        <div class="file-list">
+       <div class="file-list">
             <!-- 文件 1 -->
-            <a href="./C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf" class="file-card" download>
+            <div class="file-card">
                 <div class="file-icon">
                     <i class="fa-solid fa-file-pdf"></i>
                 </div>
@@ -403,14 +399,20 @@
                     </div>
                     <div class="file-type">PDF Document • 2.4 MB</div>
                 </div>
-                <div class="download-btn">
-                    <i class="fa-solid fa-download"></i> 下载
+                <div class="action-buttons">
+                    <!-- 预览按钮：调用 JS 函数打开模态框 -->
+                    <button class="preview-btn" onclick="openPreview('./C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf', 'C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf')">
+                        <i class="fa-solid fa-eye"></i> 预览
+                    </button>
+                    <!-- 下载按钮：保持原有下载功能 -->
+                    <a href="./C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf" class="download-btn" download>
+                        <i class="fa-solid fa-download"></i> 下载
+                    </a>
                 </div>
-            </a>
+            </div>
 
             <!-- 文件 2 -->
-            <!-- 修改提示：同上，检查路径是否正确 -->
-            <a href="./AD7746扩展电容配置方法.pdf" class="file-card" download>
+            <div class="file-card">
                 <div class="file-icon">
                     <i class="fa-solid fa-file-pdf"></i>
                 </div>
@@ -420,10 +422,29 @@
                     </div>
                     <div class="file-type">PDF Document • 1.1 MB</div>
                 </div>
-                <div class="download-btn">
-                    <i class="fa-solid fa-download"></i> 下载
+                <div class="action-buttons">
+                    <!-- 预览按钮 -->
+                    <button class="preview-btn" onclick="openPreview('./AD7746扩展电容配置方法.pdf', 'AD7746扩展电容配置方法.pdf')">
+                        <i class="fa-solid fa-eye"></i> 预览
+                    </button>
+                    <!-- 下载按钮 -->
+                    <a href="./AD7746扩展电容配置方法.pdf" class="download-btn" download>
+                        <i class="fa-solid fa-download"></i> 下载
+                    </a>
                 </div>
-            </a>
+            </div>
+        </div>
+
+        <!-- PDF 预览模态框 (放在 main 之后，contact-bar 之前) -->
+        <div id="pdfModal" class="modal-overlay" onclick="closePreview(event)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span id="modalTitle" class="modal-title">文档预览</span>
+                    <button class="close-modal" onclick="forceClosePreview()">&times;</button>
+                </div>
+                <!-- 使用 iframe 加载 PDF -->
+                <iframe id="pdfViewer" class="pdf-viewer" src=""></iframe>
+            </div>
         </div>
     </main>
     <div class="contact-bar">
