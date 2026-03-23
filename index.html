@@ -7,6 +7,132 @@
     <!-- 引入字体图标库 (FontAwesome) 用于显示PDF图标 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .preview-btn {
+            background-color: #e8f4fd;
+            color: #0056b3;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .preview-btn:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        /* 调整原有 download-btn 在 flex 布局下的表现 */
+        .download-btn {
+            /* 继承之前的样式，这里不需要大改，但确保它不被拉伸 */
+            white-space: nowrap;
+        }
+
+        /* 模态框背景 */
+        .modal-overlay {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        /* 模态框内容 */
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        /* 模态框头部 */
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 80%;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0 5px;
+        }
+
+        .close-modal:hover {
+            color: #e74c3c;
+        }
+
+        /* PDF 展示区域 */
+        .pdf-viewer {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* 移动端适配调整 */
+        @media (max-width: 600px) {
+            .file-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            .file-info {
+                width: 100%;
+            }
+            .action-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            .download-btn, .preview-btn {
+                flex: 1;
+                justify-content: center;
+            }
+            .modal-content {
+                width: 95%;
+                height: 90vh;
+            }
+        }
         /* 全局重置与基础样式 */
         * {
             margin: 0;
@@ -246,7 +372,6 @@
     </style>
 </head>
 <body>
-
     <!-- 顶部导航：Logo 靠左 -->
     <header>
         <div class="logo-container">
@@ -320,3 +445,49 @@
 
     <!-- 页脚 -->
     <footer>
+    <script>
+            // 打开预览
+            function openPreview(fileUrl, fileName) {
+                const modal = document.getElementById('pdfModal');
+                const viewer = document.getElementById('pdfViewer');
+                const title = document.getElementById('modalTitle');
+    
+                // 设置标题和来源
+                title.textContent = fileName;
+                viewer.src = fileUrl;
+                
+                // 显示模态框
+                modal.style.display = 'flex';
+                // 禁止背景滚动
+                document.body.style.overflow = 'hidden';
+            }
+    
+            // 关闭预览 (点击背景关闭)
+            function closePreview(event) {
+                if (event.target.id === 'pdfModal') {
+                    forceClosePreview();
+                }
+            }
+    
+            // 强制关闭 (点击 X 按钮或代码调用)
+            function forceClosePreview() {
+                const modal = document.getElementById('pdfModal');
+                const viewer = document.getElementById('pdfViewer');
+                
+                modal.style.display = 'none';
+                // 清空 src 以停止加载/播放
+                viewer.src = '';
+                // 恢复背景滚动
+                document.body.style.overflow = 'auto';
+            }
+    
+            // 监听 ESC 键关闭
+            document.addEventListener('keydown', function(event) {
+                if (event.key === "Escape") {
+                    const modal = document.getElementById('pdfModal');
+                    if (modal.style.display === 'flex') {
+                        forceClosePreview();
+                    }
+                }
+            });
+        </script>
