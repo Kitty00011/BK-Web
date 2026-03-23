@@ -262,15 +262,12 @@
 
     <!-- 主要内容 -->
     <main>
-        <div class="page-title">
-            <h1>技术规格书下载</h1>
-            <p>请点击下方卡片下载相关技术文档 (PDF)</p>
-        </div>
-
         <div class="file-list">
             <!-- 文件 1 -->
-            <!-- 修改处：href 指向 file 文件夹下的对应文件名 -->
-            <a href="./file/C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf" class="file-card" download>
+            <!-- 修改提示：请确保当前网页所在的文件夹下，确实有一个名为 "file" 的子文件夹，且里面有该 PDF 文件 -->
+            <!-- 如果网页和 file 文件夹同级，则保持 "./file/..." 不变 -->
+            <!-- 如果网页在根目录，file 文件夹也在根目录，通常也是 "./file/..." 或 "/file/..." -->
+            <a href=".C468936_ADC-DAC-专用型_AD7745ARUZ_规格书_WJ231470.pdf" class="file-card" download>
                 <div class="file-icon">
                     <i class="fa-solid fa-file-pdf"></i>
                 </div>
@@ -286,8 +283,8 @@
             </a>
 
             <!-- 文件 2 -->
-            <!-- 修改处：href 指向 file 文件夹下的对应文件名 -->
-            <a href="./file/AD7746扩展电容配置方法.pdf" class="file-card" download>
+            <!-- 修改提示：同上，检查路径是否正确 -->
+            <a href="./AD7746扩展电容配置方法.pdf" class="file-card" download>
                 <div class="file-icon">
                     <i class="fa-solid fa-file-pdf"></i>
                 </div>
